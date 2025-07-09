@@ -1,0 +1,14 @@
+.optionList{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+}
+
+.option{
+    margin-top: 3px;
+}
+
+.optionSelected{
+    background-color: #2E2F31;
+}
