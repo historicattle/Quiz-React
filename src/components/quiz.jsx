@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useReducer } from "react";
 import Result from "./result";
 import './quiz.css'
 
@@ -64,31 +63,31 @@ function Quiz() {
 		return count;
 	}
 
-	if(isFinished){
+	if (isFinished) {
 		const score = calculateScore();
-		return <Result score={score} totalQuestions={questionBank.length} restart={handleRestart}/>
+		return <Result score={score} totalQuestions={questionBank.length} restart={handleRestart} />
 	}
-	else{
+	else {
 		return (
-		<div>
-			<h1>QUIZZZ!!</h1>
-			<h2>Question {currentQuestion + 1}</h2>
-			<p className="question">{questionBank[currentQuestion].question}</p>
+			<div>
+				<h1>QUIZZZ!!</h1>
+				<h2>Question {currentQuestion + 1}</h2>
+				<p className="question">{questionBank[currentQuestion].question}</p>
 
-			<div className="optionList">
-				{questionBank[currentQuestion].options.map((option) => (
-					<button className={"option" + (optionSelect === option ? "Selected" : "")} onClick={() => handleSelectOption(option)}>{option}</button>
-				))}
+				<div className="optionList">
+					{questionBank[currentQuestion].options.map((option) => (
+						<button className={"option" + (optionSelect === option ? "Selected" : "")} onClick={() => handleSelectOption(option)}>{option}</button>
+					))}
+				</div>
+
+
+
+				<button className="navBtn" onClick={handlePrev} disabled={currentQuestion === 0}>Previous</button>
+				<button className="navBtn" onClick={handleNext} >
+					{currentQuestion === questionBank.length - 1 ? "Finish Quiz" : "Next"}
+				</button>
+				<div id="result" className="result"></div>
 			</div>
-
-
-
-			<button className="navBtn" onClick={handlePrev} disabled={currentQuestion === 0}>Previous</button>
-			<button className="navBtn" onClick={handleNext} >
-				{currentQuestion === questionBank.length - 1 ? "Finish Quiz" : "Next"}
-			</button>
-			<div id="result" className="result"></div>
-		</div>
 		);
 	}
 }
