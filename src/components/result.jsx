@@ -1,14 +1,19 @@
+import { useEffect } from "react";
 
+function Result({ score, totalQuestions, restart }) {
+	useEffect(() => {
+		document.title = "Result"
+	}, [])
 
-function Result(){
-    return (
-        <div>
-            <h2>Quiz Completed!</h2>
-            <p>Your score is 2/3</p>
+	return (
+		<div>
+			<h1>Quiz Completed!</h1>
+			<h2>Your Score: {score}/{totalQuestions}</h2>
+			
+			<button id="restart-btn" onClick={restart}>Restart Quiz</button>
 
-            <button id="restartBtn">Restart</button>
-        </div>
-    );
+		</div>
+	);
 }
 
 export default Result

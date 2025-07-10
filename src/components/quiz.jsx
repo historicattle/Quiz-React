@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useReducer } from "react";
+import Result from "./result";
 import './quiz.css'
 
 function Quiz() {
 	const [optionSelect, setOptionSelect] = useState("None")
 	const [userAnswers, setUserAnswers] = useState([null, null, null])
 	const [currentQuestion, setCurrentQuestion] = useState(0)
+	const [isFinished, setIsFinished] = useState(false)
 
 	const questionBank = [
 		{
@@ -36,8 +39,7 @@ function Quiz() {
 		if (currentQuestion < questionBank.length - 1) {
 			setCurrentQuestion(currentQuestion + 1)
 		} else {
-			calculateScore()
-			return <result />
+			setIsFinished(true)
 		}
 	}
 
@@ -45,38 +47,50 @@ function Quiz() {
 		setCurrentQuestion(currentQuestion - 1)
 	}
 
+	function handleRestart() {
+		setCurrentQuestion(0);
+		setUserAnswers([null, null, null]);
+		setOptionSelect("None");
+		setIsFinished(false);
+	}
+
 	function calculateScore() {
 		let count = 0;
-		for (let i = 0; i < 3; i++) {
+		for (let i = 0; i < questionBank.length; i++) {
 			if (userAnswers[i] === questionBank[i].answer) {
 				count++;
 			}
 		}
-		const resultDiv = document.getElementById("result");
-		if (resultDiv) {
-			resultDiv.innerHTML = `Your Score is ${count}/${questionBank.length}`;
-		}
+		return count;
 	}
 
-	return <div>
-		<h1>QUIZZZ!!</h1>
-		<h2>Question {currentQuestion + 1}</h2>
-		<p className="question">{questionBank[currentQuestion].question}</p>
+	if(isFinished){
+		const score = calculateScore();
+		return <Result score={score} totalQuestions={questionBank.length} restart={handleRestart}/>
+	}
+	else{
+		return (
+		<div>
+			<h1>QUIZZZ!!</h1>
+			<h2>Question {currentQuestion + 1}</h2>
+			<p className="question">{questionBank[currentQuestion].question}</p>
 
-		<div className="optionList">
-			{questionBank[currentQuestion].options.map((option) => (
-				<button className={"option" + (optionSelect === option ? "Selected" : "")} onClick={() => handleSelectOption(option)}>{option}</button>
-			))}
+			<div className="optionList">
+				{questionBank[currentQuestion].options.map((option) => (
+					<button className={"option" + (optionSelect === option ? "Selected" : "")} onClick={() => handleSelectOption(option)}>{option}</button>
+				))}
+			</div>
+
+
+
+			<button className="navBtn" onClick={handlePrev} disabled={currentQuestion === 0}>Previous</button>
+			<button className="navBtn" onClick={handleNext} >
+				{currentQuestion === questionBank.length - 1 ? "Finish Quiz" : "Next"}
+			</button>
+			<div id="result" className="result"></div>
 		</div>
-
-
-
-		<button className="navBtn" onClick={handlePrev} disabled={currentQuestion === 0}>Previous</button>
-		<button className="navBtn" onClick={handleNext} >
-			{currentQuestion === questionBank.length - 1 ? "Finish Quiz" : "Next"}
-		</button>
-		<div id="result" className="result"></div>
-	</div>
+		);
+	}
 }
 
 export default Quiz;
